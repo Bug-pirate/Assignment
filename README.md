@@ -53,6 +53,16 @@ Make sure you have these installed:
    ```bash
    cd frontend
    npm install
+   ```
+
+   Create a `.env` file in the frontend folder:
+   ```
+   VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+   VITE_API_URL=http://localhost:5000
+   ```
+
+   Start the frontend:
+   ```bash
    npm run dev
    ```
    The app will open at http://localhost:5173

@@ -22,9 +22,7 @@ app.use(helmet({
 }));
 app.use(cors({
   origin: [
-    process.env.CLIENT_ORIGIN || 'http://localhost:5173',
-    'https://accounts.google.com',
-    'https://gsi.google.com'
+    process.env.CLIENT_ORIGIN || 'http://localhost:3000'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

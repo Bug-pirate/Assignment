@@ -19,7 +19,7 @@ export interface NotesListResponse {
   };
 }
 
-const NOTES_BASE = 'http://localhost:3000/api/notes';
+const NOTES_BASE = `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/notes`;
 
 async function request<T>(endpoint: string, token: string, options: RequestInit = {}): Promise<{ success: boolean; data?: T; error?: string }>{
   try {
