@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { ErrorRequestHandler } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
@@ -15,21 +15,19 @@ const PORT = process.env.PORT || 5000;
 
 connectDB();
 
-app.use(helmet({
-  crossOriginEmbedderPolicy: false,
-  contentSecurityPolicy: false,
-  crossOriginOpenerPolicy: false
-}));
+// Security middlewares
+app.use(helmet());
+
+// CORS setup
 app.use(cors({
-  origin: [
-    process.env.CLIENT_ORIGIN || 'http://localhost:3000'
-  ],
+  origin: process.env.CLIENT_ORIGIN || 'http://localhost:3000',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   optionsSuccessStatus: 200
 }));
 
+// Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
@@ -37,35 +35,41 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
+// Body parsing
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
+// Logger
 app.use(morgan('combined'));
 
+// Health check
 app.get('/health', (req, res) => {
-  res.status(200).json({ 
-    success: true, 
+  res.status(200).json({
+    success: true,
     message: 'Server is running!',
     timestamp: new Date().toISOString()
   });
 });
 
+// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/notes', noteRoutes);
 
-app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+// Error handler
+const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   console.error(err.stack);
-  
-  res.status(err.statusCode || 500).json({
+
+  res.status((err as any).statusCode || 500).json({
     success: false,
     message: err.message || 'Internal server error',
     ...(process.env.NODE_ENV === 'development' && { stack: err.stack })
   });
-});
+};
+app.use(errorHandler);
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
 });
 
 export default app;
