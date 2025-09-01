@@ -18,7 +18,7 @@ Make sure you have these installed:
 - MongoDB (running locally or MongoDB Atlas)
 - npm or yarn
 
-### Setup
+### Local Development Setup
 
 1. **Clone and navigate to the project**
    ```bash
@@ -33,10 +33,13 @@ Make sure you have these installed:
 
    Create a `.env` file in the backend folder:
    ```
-   MONGODB_URI=mongodb://localhost:27017/hdnotes
+   MONGODB_URI=mongodb://localhost:27017/noteapp
    JWT_SECRET=your-secret-key-here
-   EMAIL_USER=your-email@gmail.com
-   EMAIL_PASS=your-app-password
+   PORT=5000
+   NODE_ENV=development
+   CLIENT_ORIGIN=http://localhost:5173
+   SMTP_USER=your-email@gmail.com
+   SMTP_PASS=your-app-password
    GOOGLE_CLIENT_ID=your-google-client-id
    EXPOSE_DEV_OTP=true
    ```
@@ -66,6 +69,39 @@ Make sure you have these installed:
    npm run dev
    ```
    The app will open at http://localhost:5173
+
+## Production Deployment
+
+### Backend Deployment (Render)
+
+1. **Connect your GitHub repository to Render**
+2. **Configure Environment Variables in Render Dashboard:**
+   ```
+   MONGODB_URI=your-mongodb-atlas-connection-string
+   JWT_SECRET=your-production-jwt-secret
+   PORT=5000
+   NODE_ENV=production
+   CLIENT_ORIGIN=https://assignment-sandy-pi.vercel.app
+   SMTP_USER=your-email@gmail.com
+   SMTP_PASS=your-app-password
+   GOOGLE_CLIENT_ID=your-google-client-id
+   EXPOSE_DEV_OTP=false
+   ```
+3. **Build Command:** `npm run build`
+4. **Start Command:** `npm start`
+5. **Root Directory:** `backend`
+
+### Frontend Deployment (Vercel)
+
+1. **Connect your GitHub repository to Vercel**
+2. **Configure Environment Variables in Vercel Dashboard:**
+   ```
+   VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+   VITE_API_URL=https://assignment-xxd3.onrender.com
+   ```
+3. **Build Command:** `npm run build`
+4. **Output Directory:** `dist`
+5. **Root Directory:** `frontend`
 
 ## How to Use
 
